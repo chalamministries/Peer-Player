@@ -60,12 +60,24 @@ class VadooTV {
 			'vadoo-tv-admin', // page
 			'vadoo_tv_setting_section' // section
 		);
+
+		add_settings_field(
+			'video_player_1', // id
+			'Video Player', // title
+			array( $this, 'video_player_1_callback' ), // callback
+			'vadoo-tv-admin', // page
+			'vadoo_tv_setting_section' // section
+		);
 	}
 
 	public function vadoo_tv_sanitize($input) {
 		$sanitary_values = array();
 		if ( isset( $input['vadootv_api_token_0'] ) ) {
 			$sanitary_values['vadootv_api_token_0'] = sanitize_text_field( $input['vadootv_api_token_0'] );
+		}
+
+		if ( isset( $input['video_player_1'] ) ) {
+			$sanitary_values['video_player_1'] = $input['video_player_1'];
 		}
 
 		return $sanitary_values;
@@ -82,6 +94,14 @@ class VadooTV {
 		);
 	}
 
+	public function video_player_1_callback() {
+		?> <select name="vadoo_tv_option_name[video_player_1]" id="video_player_1">
+			<?php $selected = (isset( $this->vadoo_tv_options['video_player_1'] ) && $this->vadoo_tv_options['video_player_1'] === 'clappr') ? 'selected' : '' ; ?>
+			<option value="clappr" <?php echo $selected; ?>>Clappr</option>
+		</select>
+		<?php
+	}
+
 }
 if ( is_admin() )
 	$vadoo_tv = new VadooTV();
@@ -90,4 +110,5 @@ if ( is_admin() )
  * Retrieve this value with:
  * $vadoo_tv_options = get_option( 'vadoo_tv_option_name' ); // Array of All Options
  * $vadootv_api_token_0 = $vadoo_tv_options['vadootv_api_token_0']; // VadooTV API Token
+ * $video_player_1 = $vadoo_tv_options['video_player_1']; // Video Player
  */

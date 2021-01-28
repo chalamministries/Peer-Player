@@ -57,7 +57,8 @@ function vadootv_shortcode($atts) {
 		return "Missing URL value";
 	}
 
-	$token = 'SAAM4WH7zSxtk27RHe3RibmfUac';
+	$vadoo_tv_options = get_option( 'vadoo_tv_option_name' );
+	$token = $vadoo_tv_options['vadootv_api_token_0'];
 
 	$playerID = "player" . rand(100,999);
 
