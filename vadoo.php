@@ -13,6 +13,21 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 include_once("widgets/elementor.php");
+include_once('updater.php');
+
+function check_upgrade()
+{
+	if (is_admin()) {
+		$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+			'https://github.com/chalamministries/Vadootv/',
+			__FILE__,
+			'Vadootv'
+		);
+		$myUpdateChecker->setAuthentication('58eb460e13d855807d762307586acd4db6782ca3');
+	}
+}
+
+add_action('plugins_loaded', 'check_upgrade');
 
 function register_vadoo_script() {
 	   wp_register_script( 'clappr', 'https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js');
