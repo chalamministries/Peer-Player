@@ -3,7 +3,7 @@
 Plugin Name: VadooTV
 Plugin URI:  https://github.com/chalamministries/Vadootv
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming and Multi-CDN With A Plug And Play Solution!
-Version:     1.1.0
+Version:     1.1.1
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
