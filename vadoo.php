@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: VadooTV
-Plugin URI:  https://github.com/chalamministries/vadootv
+Plugin URI:  https://github.com/chalamministries/Vadootv
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming and Multi-CDN With A Plug And Play Solution!
-Version:     1.0.0
+Version:     1.1.0
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 include_once("widgets/elementor.php");
 include_once('updater.php');
+include_once('settings.php');
 
 function check_upgrade()
 {
@@ -93,7 +94,6 @@ function vadootv_shortcode($atts) {
 }
 
 add_shortcode('vadootv', 'vadootv_shortcode');
-
 
 
 ?>
