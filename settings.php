@@ -99,6 +99,8 @@ class VadooTV {
 		?> <select name="vadoo_tv_option_name[video_player_1]" id="video_player_1">
 			<?php $selected = (isset( $this->vadoo_tv_options['video_player_1'] ) && $this->vadoo_tv_options['video_player_1'] === 'clappr') ? 'selected' : '' ; ?>
 			<option value="clappr" <?php echo $selected; ?>>Clappr</option>
+			<?php $selected = (isset( $this->vadoo_tv_options['video_player_1'] ) && $this->vadoo_tv_options['video_player_1'] === 'videojs') ? 'selected' : '' ; ?>
+			<option value="videojs" <?php echo $selected; ?>>VideoJS</option>
 		</select>
 		<?php
 	}

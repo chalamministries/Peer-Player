@@ -3,7 +3,7 @@
 Plugin Name: VadooTV
 Plugin URI:  https://github.com/chalamministries/Vadootv
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming and Multi-CDN With A Plug And Play Solution!
-Version:     1.1.1
+Version:     1.2
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
@@ -31,16 +31,25 @@ function check_upgrade()
 add_action('plugins_loaded', 'check_upgrade');
 
 function register_vadoo_script() {
+	   $plugin_url = plugin_dir_url( __FILE__ );
+
 	   wp_register_script( 'clappr', 'https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js');
 	   wp_register_script( 'clappr_responsive', 'https://cdn.jsdelivr.net/npm/clappr-responsive-container-plugin@1.0.0/dist/clappr-responsive-container-plugin.min.js', array('clappr', 'jquery'));
+	   wp_register_script( 'videojs', "https://unpkg.com/video.js/dist/video.min.js");
+	   wp_register_script( 'videojshls', 'https://cdn.jsdelivr.net/npm/videojs-contrib-hls.js@latest');
+	   wp_register_script( 'videojswatermark', $plugin_url . "js/videojs.watermark.js?3", array('videojs'));
 	   wp_register_script( 'vadoosdk', 'https://jssdk.peervadoo.com/vadoosdk.js');
 	   wp_enqueue_script( 'clappr' );
 	   wp_enqueue_script( 'clappr_responsive' );
+	   wp_enqueue_script( 'videojs' );
+	   wp_enqueue_script( 'videojshls' );
+	   wp_enqueue_script( 'videojswatermark' );
 	   wp_enqueue_script( 'vadoosdk' );
 
-	   $plugin_url = plugin_dir_url( __FILE__ );
+	   wp_enqueue_style( 'style',  $plugin_url . "css/embed.css");
+	   wp_enqueue_style('videojswatermarkstyle', $plugin_url . "css/videojs.watermark.css");
+	   wp_enqueue_style('videojscss', 'https://unpkg.com/video.js/dist/video-js.min.css');
 
-	   wp_enqueue_style( 'style',  $plugin_url . "/css/embed.css");
 }
 
 add_action( 'wp_enqueue_scripts', 'register_vadoo_script' );
@@ -59,6 +68,20 @@ function vadootv_shortcode($atts) {
 
 	$vadoo_tv_options = get_option( 'vadoo_tv_option_name' );
 	$token = $vadoo_tv_options['vadootv_api_token_0'];
+	$player = $vadoo_tv_options['video_player_1'];
+
+	switch($player) {
+		case "videojs":
+			return vadoo_videojs_player($token, $a);
+			break;
+		case "clappr":
+		default:
+			return vadoo_clappr_player($token, $a);
+			break;
+	}
+}
+
+function vadoo_clappr_player($token, $a) {
 
 	$playerID = "player" . rand(100,999);
 
@@ -90,6 +113,50 @@ function vadootv_shortcode($atts) {
 		var '. $playerID .' = new Clappr.Player(options);
 		vadoo.base.start_clappr_player('. $playerID .');
 	  </script>';
+
+	  return $html;
+}
+
+function vadoo_videojs_player($token, $a) {
+
+
+	$playerID = "player" . rand(100,999);
+	$autoplay = $a['autoplay'] == true ? "autoplay" : "";
+
+	$html = '<video id="'.$playerID.'" class="video-js vjs-default-skin" preload="none" '.$autoplay.' controls></video>
+	  <script>
+		var mixer = new vadoo.base.Mixer(token="'.$token.'");
+
+		var '.$playerID.' = videojs("'.$playerID.'", {
+			muted: '.$a['muted'].',
+			fluid: true,
+			responsive: true,
+			html5: {
+				hlsjsConfig: {
+					liveSyncDurationCount: 5,
+					loader: mixer.createMixer()
+				}
+			}
+		});
+
+		vadoo.base.init_videojs_player('.$playerID.');
+
+		'.$playerID.'.src({
+			src: "'.$a['url'].'",
+			type: "application/x-mpegURL"
+		});';
+
+		if($a['watermark'] != "") {
+		  $html .= $playerID . '.watermark({
+			  file: "'.$a['watermark'].'",
+			  xpos: 100,
+			  ypos: 100,
+			  xrepeat: 0,
+			  opacity: 0.5,
+		  });';
+		}
+
+	  $html .= '</script>';
 
 	  return $html;
 }
