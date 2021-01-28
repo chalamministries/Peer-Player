@@ -130,6 +130,7 @@ function vadoo_videojs_player($token, $a) {
 		var '.$playerID.' = videojs("'.$playerID.'", {
 			muted: '.$a['muted'].',
 			fluid: true,
+			autoplay: '.$a['autoplay'].',
 			responsive: true,
 			html5: {
 				hlsjsConfig: {
