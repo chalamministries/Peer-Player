@@ -21,7 +21,7 @@ class Widget_Loader {
 
 		$this->include_widgets_files();
 
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type(new Widgets\VadooTV());
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type(new Widgets\PeervadooTV());
 
 	  }
 

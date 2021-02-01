@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: VadooTV
-Plugin URI:  https://github.com/chalamministries/Vadootv
+Plugin Name: Peervadoo
+Plugin URI:  https://github.com/chalamministries/Peervadoo
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming and Multi-CDN With A Plug And Play Solution!
-Version:     1.2
+Version:     1.2.1
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
@@ -20,9 +20,9 @@ function check_upgrade()
 {
 	if (is_admin()) {
 		$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-			'https://github.com/chalamministries/Vadootv/',
+			'https://github.com/chalamministries/Peervadoo/',
 			__FILE__,
-			'Vadootv'
+			'Peervadoo'
 		);
 		$myUpdateChecker->setAuthentication('58eb460e13d855807d762307586acd4db6782ca3');
 	}
@@ -54,7 +54,7 @@ function register_vadoo_script() {
 
 add_action( 'wp_enqueue_scripts', 'register_vadoo_script' );
 
-function vadootv_shortcode($atts) {
+function peervadoo_shortcode($atts) {
 	$a = shortcode_atts( array(
 	  'url' => '',
 	  'autoplay' => 'true',
@@ -162,7 +162,7 @@ function vadoo_videojs_player($token, $a) {
 	  return $html;
 }
 
-add_shortcode('vadootv', 'vadootv_shortcode');
+add_shortcode('peervadoo', 'peervadoo_shortcode');
 
 
 ?>

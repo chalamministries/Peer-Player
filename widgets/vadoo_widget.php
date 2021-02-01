@@ -8,7 +8,7 @@ use Elementor\Controls_Manager;
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 
-class VadooTV extends Widget_Base{
+class PeervadooTV extends Widget_Base{
 
   public function get_name(){
 	return 'vadoo-player';
