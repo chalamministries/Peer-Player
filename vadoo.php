@@ -24,7 +24,7 @@ function check_upgrade()
 			__FILE__,
 			'Peervadoo'
 		);
-		$myUpdateChecker->setAuthentication('58eb460e13d855807d762307586acd4db6782ca3');
+		//$myUpdateChecker->setAuthentication('58eb460e13d855807d762307586acd4db6782ca3');
 	}
 }
 
