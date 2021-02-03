@@ -3,7 +3,7 @@
 Plugin Name: Peervadoo
 Plugin URI:  https://github.com/chalamministries/Peervadoo
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming and Multi-CDN With A Plug And Play Solution!
-Version:     2.0.0
+Version:     2.0.1
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
