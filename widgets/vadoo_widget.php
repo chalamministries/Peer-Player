@@ -88,7 +88,7 @@ class PeervadooTV extends Widget_Base{
   protected function render(){
 	$settings = $this->get_settings_for_display();
 
-	echo do_shortcode('[vadootv url="'.$settings['vadoo_url'].'" autoplay="'.$settings['vadoo_autoplay'].'" muted="'.$settings['vadoo_muted'].'" watermark="'.$settings['vadoo_watermark']['url'].'"]');
+	echo do_shortcode('[peervadoo url="'.$settings['vadoo_url'].'" autoplay="'.$settings['vadoo_autoplay'].'" muted="'.$settings['vadoo_muted'].'" watermark="'.$settings['vadoo_watermark']['url'].'"]');
   }
 
 
