@@ -4,80 +4,76 @@
  * at http://jeremyhixon.com/wp-tools/option-page/
  */
 
-class Peervadoo {
-	private $peervadoo_options;
+class PeerPlayer {
+	private $peerplayer_options;
 
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'peervadoo_add_plugin_page' ) );
-		add_action( 'admin_init', array( $this, 'peervadoo_page_init' ) );
+		add_action( 'admin_menu', array( $this, 'peerplayer_add_plugin_page' ) );
+		add_action( 'admin_init', array( $this, 'peerplayer_page_init' ) );
 	}
 
-	public function peervadoo_add_plugin_page() {
+	public function peerplayer_add_plugin_page() {
 		add_options_page(
-			'Peervadoo', // page_title
-			'Peervadoo', // menu_title
+			'Peer Player', // page_title
+			'Peer Player', // menu_title
 			'manage_options', // capability
-			'peervadoo', // menu_slug
-			array( $this, 'peervadoo_create_admin_page' ) // function
+			'peerplayer', // menu_slug
+			array( $this, 'peerplayer_create_admin_page' ) // function
 		);
 	}
 
-	public function peervadoo_create_admin_page() {
-		$this->peervadoo_options = get_option( 'peervadoo_option_name' ); ?>
+	public function peerplayer_create_admin_page() {
+		$this->peerplayer_options = get_option( 'peerplayer_option_name' ); ?>
 
 		<div class="wrap">
-			<h2>Peervadoo</h2>
-			<p>You can find your API Token by logging in to https://api.peervadoo.com/addapp</p>
+			<h2>Peer Player</h2>
             <h3>Shortcode Instructions:</h3>
-            <p>[peervadoo url="" autoplay="true" muted="false" watermark=""]</p>
+            <p>[peerplayer url="" autoplay="true" muted="false" watermark=""]</p>
 			<?php settings_errors(); ?>
 
 			<form method="post" action="options.php">
 				<?php
-					settings_fields( 'peervadoo_option_group' );
-					do_settings_sections( 'peervadoo-admin' );
+					settings_fields( 'peerplayer_option_group' );
+					do_settings_sections( 'peerplayer-admin' );
 					submit_button();
 				?>
 			</form>
 		</div>
 	<?php }
 
-	public function peervadoo_page_init() {
+	public function peerplayer_page_init() {
 		register_setting(
-			'peervadoo_option_group', // option_group
-			'peervadoo_option_name', // option_name
-			array( $this, 'peervadoo_sanitize' ) // sanitize_callback
+			'peerplayer_option_group', // option_group
+			'peerplayer_option_name', // option_name
+			array( $this, 'peerplayer_sanitize' ) // sanitize_callback
 		);
 
 		add_settings_section(
-			'peervadoo_setting_section', // id
+			'peerplayer_setting_section', // id
 			'Settings', // title
-			array( $this, 'peervadoo_section_info' ), // callback
-			'peervadoo-admin' // page
+			array( $this, 'peerplayer_section_info' ), // callback
+			'peerplayer-admin' // page
 		);
 
-		add_settings_field(
-			'peervadoo_api_token_0', // id
-			'Peervadoo API Token', // title
-			array( $this, 'peervadoo_api_token_0_callback' ), // callback
-			'peervadoo-admin', // page
-			'peervadoo_setting_section' // section
-		);
+		// add_settings_field(
+		// 	'peerplayer_api_token_0', // id
+		// 	'Peerplayer API Token', // title
+		// 	array( $this, 'peerplayer_api_token_0_callback' ), // callback
+		// 	'peerplayer-admin', // page
+		// 	'peerplayer_setting_section' // section
+		// );
 
 		add_settings_field(
 			'video_player_1', // id
 			'Video Player', // title
 			array( $this, 'video_player_1_callback' ), // callback
-			'peervadoo-admin', // page
-			'peervadoo_setting_section' // section
+			'peerplayer-admin', // page
+			'peerplayer_setting_section' // section
 		);
 	}
 
-	public function peervadoo_sanitize($input) {
+	public function peerplayer_sanitize($input) {
 		$sanitary_values = array();
-		if ( isset( $input['peervadoo_api_token_0'] ) ) {
-			$sanitary_values['peervadoo_api_token_0'] = sanitize_text_field( $input['peervadoo_api_token_0'] );
-		}
 
 		if ( isset( $input['video_player_1'] ) ) {
 			$sanitary_values['video_player_1'] = $input['video_player_1'];
@@ -86,34 +82,34 @@ class Peervadoo {
 		return $sanitary_values;
 	}
 
-	public function peervadoo_section_info() {
+	public function peerplayer_section_info() {
 
 	}
 
-	public function peervadoo_api_token_0_callback() {
-		printf(
-			'<input class="regular-text" type="text" name="peervadoo_option_name[peervadoo_api_token_0]" id="peervadoo_api_token_0" value="%s">',
-			isset( $this->peervadoo_options['peervadoo_api_token_0'] ) ? esc_attr( $this->peervadoo_options['peervadoo_api_token_0']) : ''
-		);
-	}
 
 	public function video_player_1_callback() {
-		?> <select name="peervadoo_option_name[video_player_1]" id="video_player_1">
-			<?php $selected = (isset( $this->peervadoo_options['video_player_1'] ) && $this->peervadoo_options['video_player_1'] === 'clappr') ? 'selected' : '' ; ?>
+		?> <select name="peerplayer_option_name[video_player_1]" id="video_player_1">
+			<?php $selected = (isset( $this->peerplayer_options['video_player_1'] ) && $this->peerplayer_options['video_player_1'] === 'clappr') ? 'selected' : '' ; ?>
 			<option value="clappr" <?php echo $selected; ?>>Clappr</option>
-			<?php $selected = (isset( $this->peervadoo_options['video_player_1'] ) && $this->peervadoo_options['video_player_1'] === 'videojs') ? 'selected' : '' ; ?>
+			<?php $selected = (isset( $this->peerplayer_options['video_player_1'] ) && $this->peerplayer_options['video_player_1'] === 'videojs') ? 'selected' : '' ; ?>
 			<option value="videojs" <?php echo $selected; ?>>VideoJS</option>
+			<!-- <?php $selected = (isset( $this->peerplayer_options['video_player_1'] ) && $this->peerplayer_options['video_player_1'] === 'flowplayer') ? 'selected' : '' ; ?>
+			<option value="flowplayer" <?php echo $selected; ?>>Flow Player</option>
+			<?php $selected = (isset( $this->peerplayer_options['video_player_1'] ) && $this->peerplayer_options['video_player_1'] === 'jwplayer') ? 'selected' : '' ; ?>
+			<option value="jwplayer" <?php echo $selected; ?>>JW Player</option>
+			<?php $selected = (isset( $this->peerplayer_options['video_player_1'] ) && $this->peerplayer_options['video_player_1'] === 'mediaelement') ? 'selected' : '' ; ?>
+			<option value="mediaelement" <?php echo $selected; ?>>Media Element</option> -->
 		</select>
 		<?php
 	}
 
 }
 if ( is_admin() )
-	$peervadoo = new Peervadoo();
+	$peerplayer = new PeerPlayer();
 
 /*
  * Retrieve this value with:
- * $peervadoo_options = get_option( 'peervadoo_option_name' ); // Array of All Options
- * $peervadoo_api_token_0 = $peervadoo_options['peervadoo_api_token_0']; // peervadoo API Token
- * $video_player_1 = $peervadoo_options['video_player_1']; // Video Player
+ * $peerplayer_options = get_option( 'peerplayer_option_name' ); // Array of All Options
+ * $peerplayer_api_token_0 = $peerplayer_options['peerplayer_api_token_0']; // peerplayer API Token
+ * $video_player_1 = $peerplayer_options['video_player_1']; // Video Player
  */

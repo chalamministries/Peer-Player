@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Peervadoo
-Plugin URI:  https://github.com/chalamministries/Peervadoo
-Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming and Multi-CDN With A Plug And Play Solution!
-Version:     2.0.3
+Plugin Name: Peer Player
+Plugin URI:  https://github.com/chalamministries/Peer-Player
+Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming With A Plug And Play Solution!
+Version:     3.0.0
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
@@ -20,9 +20,10 @@ function check_upgrade()
 {
 	if (is_admin()) {
 		$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-			'https://github.com/chalamministries/Peervadoo/',
+			'https://github.com/chalamministries/Peer-Player/',
 			__FILE__,
-			'Peervadoo'
+			'PeerPlayer',
+			'24'
 		);
 		//$myUpdateChecker->setAuthentication('58eb460e13d855807d762307586acd4db6782ca3');
 	}
@@ -30,7 +31,7 @@ function check_upgrade()
 
 add_action('plugins_loaded', 'check_upgrade');
 
-function register_vadoo_script() {
+function register_player_script() {
 	   $plugin_url = plugin_dir_url( __FILE__ );
 
 	   wp_register_script( 'clappr', 'https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js');
@@ -38,13 +39,15 @@ function register_vadoo_script() {
 	   wp_register_script( 'videojs', "https://unpkg.com/video.js/dist/video.min.js");
 	   wp_register_script( 'videojshls', 'https://cdn.jsdelivr.net/npm/videojs-contrib-hls.js@latest');
 	   wp_register_script( 'videojswatermark', $plugin_url . "js/videojs.watermark.js?3", array('videojs'));
-	   wp_register_script( 'vadoosdk', 'https://jssdk.peervadoo.com/vadoosdk.js');
+	   wp_register_script( 'p2pcore', 'https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js');
+	   wp_register_script( 'p2phls', 'https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-hlsjs.min.js');
 	   wp_enqueue_script( 'clappr' );
 	   wp_enqueue_script( 'clappr_responsive' );
 	   wp_enqueue_script( 'videojs' );
 	   wp_enqueue_script( 'videojshls' );
 	   wp_enqueue_script( 'videojswatermark' );
-	   wp_enqueue_script( 'vadoosdk' );
+	   wp_enqueue_script( 'p2pcore' );
+	   wp_enqueue_script( 'p2phls' );
 
 	   wp_enqueue_style( 'style',  $plugin_url . "css/embed.css");
 	   wp_enqueue_style('videojswatermarkstyle', $plugin_url . "css/videojs.watermark.css");
@@ -52,9 +55,9 @@ function register_vadoo_script() {
 
 }
 
-add_action( 'wp_enqueue_scripts', 'register_vadoo_script' );
+add_action( 'wp_enqueue_scripts', 'register_player_script' );
 
-function peervadoo_shortcode($atts) {
+function peerplayer_shortcode($atts) {
 	$a = shortcode_atts( array(
 	  'url' => '',
 	  'autoplay' => 'true',
@@ -66,22 +69,21 @@ function peervadoo_shortcode($atts) {
 		return "Missing URL value";
 	}
 
-	$peervadoo_options = get_option( 'peervadoo_option_name' ); // Array of All Options
-	$token = $peervadoo_options['peervadoo_api_token_0']; // peervadoo API Token
-	$player = $peervadoo_options['video_player_1']; // Video Player
+	$peerplayer_options = get_option( 'peerplayer_option_name' ); // Array of All Options
+	$player = $peerplayer_options['video_player_1']; // Video Player
 
 	switch($player) {
 		case "videojs":
-			return vadoo_videojs_player($token, $a);
+			return player_videojs_player($a);
 			break;
 		case "clappr":
 		default:
-			return vadoo_clappr_player($token, $a);
+			return player_clappr_player($a);
 			break;
 	}
 }
 
-function vadoo_clappr_player($token, $a) {
+function player_clappr_player($a) {
 
 	$playerID = "player" . rand(100,999);
 
@@ -89,7 +91,7 @@ function vadoo_clappr_player($token, $a) {
 	  <script>
 
 	  console.log("Init Clappr");
-		var mixer = new vadoo.base.Mixer(token="'.$token.'");
+		var engine = new p2pml.hlsjs.Engine();
 
 		var options = {
 			parentId: "#'.$playerID.'",
@@ -101,7 +103,7 @@ function vadoo_clappr_player($token, $a) {
 			playback: {
 				hlsjsConfig: {
 					liveSyncDurationCount: 5,
-					loader: mixer.createMixer()
+					loader: engine.createLoaderClass()
 				}
 			},
 			watermark: "'.$a['watermark'].'",
@@ -111,13 +113,13 @@ function vadoo_clappr_player($token, $a) {
 		}
 
 		var '. $playerID .' = new Clappr.Player(options);
-		vadoo.base.start_clappr_player('. $playerID .');
+		p2pml.hlsjs.initClapprPlayer(p('. $playerID .');
 	  </script>';
 
 	  return $html;
 }
 
-function vadoo_videojs_player($token, $a) {
+function player_videojs_player($a) {
 
 
 	$playerID = "player" . rand(100,999);
@@ -126,7 +128,7 @@ function vadoo_videojs_player($token, $a) {
 	$html = '<video id="'.$playerID.'" class="video-js vjs-default-skin" preload="none" '.$autoplay.' controls></video>
 	  <script>
 	  console.log("Init VideoJS");
-		var mixer = new vadoo.base.Mixer(token="'.$token.'");
+		var engine = new p2pml.hlsjs.Engine();
 
 		var '.$playerID.' = videojs("'.$playerID.'", {
 			muted: '.$a['muted'].',
@@ -136,12 +138,12 @@ function vadoo_videojs_player($token, $a) {
 			html5: {
 				hlsjsConfig: {
 					liveSyncDurationCount: 5,
-					loader: mixer.createMixer()
+					loader: engine.createLoaderClass()
 				}
 			}
 		});
 
-		vadoo.base.init_videojs_player('.$playerID.');
+		p2pml.hlsjs.initVideoJsContribHlsJsPlayer('.$playerID.');
 
 		'.$playerID.'.src({
 			src: "'.$a['url'].'",
@@ -163,7 +165,7 @@ function vadoo_videojs_player($token, $a) {
 	  return $html;
 }
 
-add_shortcode('peervadoo', 'peervadoo_shortcode');
+add_shortcode('peerplayer', 'peerplayer_shortcode');
 
 
 ?>
