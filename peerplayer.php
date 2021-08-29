@@ -3,7 +3,7 @@
 Plugin Name: Peer Player
 Plugin URI:  https://github.com/chalamministries/Peer-Player
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming With A Plug And Play Solution!
-Version:     3.0.0
+Version:     3.0.1
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vadoo\Widgets;
+namespace PeerPlayer\Widgets;
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
@@ -8,14 +8,14 @@ use Elementor\Controls_Manager;
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 
-class PeervadooTV extends Widget_Base{
+class PeerPlayer extends Widget_Base{
 
   public function get_name(){
-	return 'vadoo-player';
+	return 'Peer-player';
   }
 
   public function get_title(){
-	return 'Vadoo Player';
+	return 'Peer Player';
   }
 
   public function get_icon(){
@@ -37,7 +37,7 @@ class PeervadooTV extends Widget_Base{
 	);
 
 	$this->add_control(
-	  'vadoo_url',
+	  'Peerplayer_url',
 	  [
 		'label' => 'Video URL',
 		'type' => \Elementor\Controls_Manager::TEXT
@@ -45,7 +45,7 @@ class PeervadooTV extends Widget_Base{
 	);
 
 	$this->add_control(
-		'vadoo_autoplay',
+		'Peerplayer_autoplay',
 		[
 			'label' => __( 'Auto Play', 'plugin-domain' ),
 			'type' => \Elementor\Controls_Manager::SELECT,
@@ -58,7 +58,7 @@ class PeervadooTV extends Widget_Base{
 	);
 
 	$this->add_control(
-		'vadoo_muted',
+		'Peerplayer_muted',
 		[
 			'label' => __( 'Muted', 'plugin-domain' ),
 			'type' => \Elementor\Controls_Manager::SELECT,
@@ -71,7 +71,7 @@ class PeervadooTV extends Widget_Base{
 	);
 
 	$this->add_control(
-		'vadoo_watermark',
+		'Peerplayer_watermark',
 		[
 			'label' => __( 'Watermark', 'plugin-domain' ),
 			'type' => \Elementor\Controls_Manager::MEDIA,
@@ -88,7 +88,7 @@ class PeervadooTV extends Widget_Base{
   protected function render(){
 	$settings = $this->get_settings_for_display();
 
-	echo do_shortcode('[peervadoo url="'.$settings['vadoo_url'].'" autoplay="'.$settings['vadoo_autoplay'].'" muted="'.$settings['vadoo_muted'].'" watermark="'.$settings['vadoo_watermark']['url'].'"]');
+	echo do_shortcode('[peerplayer url="'.$settings['Peerplayer_url'].'" autoplay="'.$settings['Peerplayer_autoplay'].'" muted="'.$settings['Peerplayer_muted'].'" watermark="'.$settings['Peerplayer_watermark']['url'].'"]');
   }
 
 

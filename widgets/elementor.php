@@ -1,5 +1,5 @@
 <?php
-namespace Vadoo;
+namespace PeerPlayer;
 
 class Widget_Loader {
 	private static $_instance = null;
@@ -14,14 +14,14 @@ class Widget_Loader {
 
 
 	  private function include_widgets_files(){
-		require_once('vadoo_widget.php');
+		require_once('peerplayer_widget.php');
 	  }
 
 	  public function register_widgets(){
 
 		$this->include_widgets_files();
 
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type(new Widgets\PeervadooTV());
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type(new Widgets\PeerPlayer());
 
 	  }
 
