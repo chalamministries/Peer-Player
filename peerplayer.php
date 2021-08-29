@@ -3,7 +3,7 @@
 Plugin Name: Peer Player
 Plugin URI:  https://github.com/chalamministries/Peer-Player
 Description: Reduce CDN Costs and Rebuffering In Video Streaming Using Hybrid P2P Streaming With A Plug And Play Solution!
-Version:     3.0.1
+Version:     3.0.2
 Author:      Steven Gauerke
 Author URI:  http://github.com/chalamministries
 License:     GPL2
@@ -40,7 +40,7 @@ function register_player_script() {
 	   wp_register_script( 'videojshls', 'https://cdn.jsdelivr.net/npm/videojs-contrib-hls.js@latest');
 	   wp_register_script( 'videojswatermark', $plugin_url . "js/videojs.watermark.js?3", array('videojs'));
 	   wp_register_script( 'p2pcore', 'https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js');
-	   wp_register_script( 'p2phls', 'https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-hlsjs.min.js');
+	   wp_register_script( 'p2phls', 'https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js');
 	   wp_enqueue_script( 'clappr' );
 	   wp_enqueue_script( 'clappr_responsive' );
 	   wp_enqueue_script( 'videojs' );
@@ -113,7 +113,7 @@ function player_clappr_player($a) {
 		}
 
 		var '. $playerID .' = new Clappr.Player(options);
-		p2pml.hlsjs.initClapprPlayer(p('. $playerID .');
+		p2pml.hlsjs.initClapprPlayer('. $playerID .');
 	  </script>';
 
 	  return $html;
